@@ -1,0 +1,18 @@
+name: Check Emulators
+on: workflow_dispatch
+jobs:
+  ios_emulators:
+    name: IOS Emulators
+    runs-on: macos-latest
+    steps:
+      - name : check Emulators
+        run: |
+          xcrun xctrace list devices | grep -v "Apple Watch" | grep "Simulator" | grep -v "Apple TV" | grep -v "==" | sed -r "s/^(.*) *Simulator.*\(([0-9\.]*)\).*\([0-9A-Z-]*\).*$/OS: \2\tName: \1/"
+  android_emulators:
+    name: Android Emulators
+    runs-on: macos-latest
+    steps:
+      - name : check Emulators
+        run: |
+          cd "$ANDROID_SDK_ROOT/tools/bin" || exit 1
+          ./sdkmanager --list 2> /dev/null | grep "system-images" | grep -v "\-tv" | grep -v "Sandbox" | grep -v "android-wear" | sed -r "s/^[^;]*;android-([0-9]*);([^;]*);([^; ]*).*$/API: \1\tARCH: \3\tTARGET: \2/" | expand -t 10,35
