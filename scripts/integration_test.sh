@@ -11,7 +11,7 @@ cd "$(dirname "$0")/.." || exit 1
 
 if [ "$CI" = true ]; then
   # CI環境のテスト実行
-  flutter test integration_test --coverage --machine -d "$1" | tee >(grep "^{" | grep "}$" >temp_report.log)
+  flutter test integration_test --machine -d "$1" | tee >(grep "^{" | grep "}$" >temp_report.log)
 else
   if [ $# -eq 1 ]; then
     #デバイス名が設定されているなら
