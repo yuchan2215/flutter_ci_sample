@@ -37,6 +37,14 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void _save() {
+    //TODO
+  }
+
+  void _load() {
+    //TODO
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -53,6 +61,14 @@ class _MyHomePageState extends State<MyHomePage> {
             Text(
               '$_counter',
               style: Theme.of(context).textTheme.headline4,
+            ),
+            ElevatedButton(
+              onPressed: () => _save(),
+              child: const Text("Save"),
+            ),
+            ElevatedButton(
+              onPressed: () => _load(),
+              child: const Text("Load"),
             ),
           ],
         ),
