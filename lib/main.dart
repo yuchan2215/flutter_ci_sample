@@ -1,6 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+
+Key saveKey = const ValueKey("saveKey");
+Key loadKey = const ValueKey("loadKey");
+Key countKey = const ValueKey("countKey");
+const countStorageKey = "COUNT";
+
 void main() {
   runApp(const MyApp());
 }
@@ -31,7 +37,6 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   final _storage = const FlutterSecureStorage();
-  static const _countStorageKey = "COUNT";
   int _counter = 0;
 
   void _incrementCounter() {
@@ -40,11 +45,11 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  /// ストレージの[_countStorageKey]に[_count]を保存する。
+  /// ストレージの[countStorageKey]に[_count]を保存する。
   void _save() {
     _storage
         .write(
-          key: _countStorageKey,
+          key: countStorageKey,
           value: _counter.toString(),
         )
         .then(
@@ -54,9 +59,9 @@ class _MyHomePageState extends State<MyHomePage> {
         );
   }
 
-  /// ストレージから[_countStorageKey]を使って保存された値を読み込み、[_count]に反映させる。
+  /// ストレージから[countStorageKey]を使って保存された値を読み込み、[_count]に反映させる。
   void _load() {
-    _storage.read(key: _countStorageKey).then((value) {
+    _storage.read(key: countStorageKey).then((value) {
       //もし値がないなら早期リターン
       if (value == null) {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -89,13 +94,16 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             Text(
               '$_counter',
+              key: countKey,
               style: Theme.of(context).textTheme.headline4,
             ),
             ElevatedButton(
+              key: saveKey,
               onPressed: () => _save(),
               child: const Text("Save"),
             ),
             ElevatedButton(
+              key: loadKey,
               onPressed: () => _load(),
               child: const Text("Load"),
             ),
