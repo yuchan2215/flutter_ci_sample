@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -29,6 +30,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final _storage = const FlutterSecureStorage();
+  static const _countStorageKey = "COUNT";
   int _counter = 0;
 
   void _incrementCounter() {
@@ -37,12 +40,38 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  /// ストレージの[_countStorageKey]に[_count]を保存する。
   void _save() {
-    //TODO
+    _storage
+        .write(
+          key: _countStorageKey,
+          value: _counter.toString(),
+        )
+        .then(
+          (value) => ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("保存しました")),
+          ),
+        );
   }
 
+  /// ストレージから[_countStorageKey]を使って保存された値を読み込み、[_count]に反映させる。
   void _load() {
-    //TODO
+    _storage.read(key: _countStorageKey).then((value) {
+      //もし値がないなら早期リターン
+      if (value == null) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("データが保存されていません。")),
+        );
+        return;
+      }
+      int loadValue = int.parse(value);
+      setState(() {
+        _counter = loadValue;
+      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("データを読み込みました")),
+      );
+    });
   }
 
   @override
