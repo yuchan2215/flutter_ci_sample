@@ -30,6 +30,15 @@ jobs:
       - name: run integration test
         run: |
           bash ./.github/workflows/ios/integration_test.sh "${{ matrix.device }}"
+      - name: Report
+        uses: dorny/test-reporter@v1
+        with:
+          name: '${{ matrix.device }}'
+          path: 'temp_report.log'
+          reporter: 'flutter-json'
+          fail-on-error: 'false'
+      - name: Code Coverage Report
+        uses: romeovs/lcov-reporter-action@v0.3.1
 
   integration_test_android:
     name: IntegrationTest(Android)
@@ -88,4 +97,12 @@ jobs:
           disable-animations: true
           script: |
             bash ./scripts/integration_test.sh "emulator-5554"
-
+      - name: Report
+        uses: dorny/test-reporter@v1
+        with:
+          name: '${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.arch }}'
+          path: 'temp_report.log'
+          reporter: 'flutter-json'
+          fail-on-error: 'false'
+      - name: Code Coverage Report
+        uses: romeovs/lcov-reporter-action@v0.3.1
