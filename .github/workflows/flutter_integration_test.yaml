@@ -1,7 +1,14 @@
 name: Flutter Integration Test
 
-on: workflow_dispatch
-
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
 
 jobs:
   integration_test_ios:
@@ -37,6 +44,8 @@ jobs:
           fail-on-error: 'false'
       - name: Code Coverage Report
         uses: romeovs/lcov-reporter-action@v0.3.1
+        with:
+          title: '${{ matrix.device }}'
 
   integration_test_android:
     name: IntegrationTest(Android)
@@ -104,3 +113,5 @@ jobs:
           fail-on-error: 'false'
       - name: Code Coverage Report
         uses: romeovs/lcov-reporter-action@v0.3.1
+        with:
+          title: '${{ matrix.api-level }}-${{ matrix.target }}-${{ matrix.arch }}'
