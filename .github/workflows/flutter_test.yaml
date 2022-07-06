@@ -36,3 +36,5 @@ jobs:
           path: 'temp_report.log'
           reporter: 'flutter-json'
           fail-on-error: 'false'
+      - name: Code Coverage Report
+        uses: romeovs/lcov-reporter-action@v0.3.1
